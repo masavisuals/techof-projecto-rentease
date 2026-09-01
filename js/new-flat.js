@@ -159,12 +159,22 @@ newFlatForm.addEventListener("submit", (event) => {
    * 5. Só se saveFlats devolver true: limpa o formulário, limpa os erros
    *    e apresenta a mensagem de sucesso com o link para flats.html.
    */
-
-  showFormFeedback(
-    "Os dados são válidos. Completa o TODO JS-NEW-1 para guardar o apartamento.",
-    "warning"
-  );
+  const allFlats = loadFlats();
+  const newFlat = {
+    id: Date.now(),
+    ...validationResult.data,
+    isFavourite: false
+  };
+  allFlats.push(newFlat);
+  if (saveFlats(allFlats)) {
+    showFormFeedback("Apartamento guardado com sucesso", "warning" === "success" ? "success" : "warning", true);
+  } else {
+    showFormFeedback("Apartamento não guardado", "warning" === "success" ? "success" : "warning", true);
+  }
+  newFlatForm.reset();
 });
+/* ------------------------------------------------------------ */
+
 
 loadFlats();
 
