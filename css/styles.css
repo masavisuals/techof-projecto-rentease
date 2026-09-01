@@ -215,7 +215,11 @@ h3 {
 /* TODO CSS-1: apresenta .stats-grid e .property-grid com CSS Grid. */
 .stats-grid,
 .property-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
+/* ------------------------------------------------------------ */
 
 .stat-card,
 .property-card,
@@ -243,11 +247,17 @@ h3 {
 /* TODO CSS-2: cria grelhas para os campos de filtros e do formulário. */
 .filters-grid,
 .form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
+/* ------------------------------------------------------------ */
 
 /* TODO CSS-3: faz os campos .field--wide ocuparem a largura necessária na grelha. */
 .field--wide {
+  grid-column: span 2;
 }
+/* ------------------------------------------------------------ */
 
 .field {
   margin-bottom: 1rem;
@@ -344,7 +354,11 @@ h3 {
 .property-card__fact,
 .property-card__fact-label,
 .property-card__fact-value {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
+/* ------------------------------------------------------------ */
 
 .badge {
   padding: 0.3rem 0.55rem;
@@ -357,8 +371,29 @@ h3 {
 
 /* TODO CSS-5: estiliza o footer que acrescentaste às três páginas. */
 .site-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 /* TODO CSS-6: acrescenta regras específicas para ecrãs até 700px. */
 @media (max-width: 700px) {
+  .stats-grid,
+  .property-grid {
+    grid-template-columns: 1fr;
+  }
+  .field--wide {
+    grid-column: span 1;
+  }
+  .filters-grid,
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }
