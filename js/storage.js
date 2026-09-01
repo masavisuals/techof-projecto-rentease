@@ -15,8 +15,20 @@ function loadFlats() {
    * 5. Se ocorrer um erro, define storageMessage e devolve [].
    */
 
-  return [];
+  return [];  const flats = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!Array.isArray(flats)) {
+    return [];
+  }
+  try {
+    storageMessage = "";
+    return flats;
+  } catch (error) {
+    storageMessage = "Erro ao carregar os apartamentos.";
+    return [];
+  }
 }
+/* ------------------------------------------------------------ */
+
 
 function saveFlats(flats) {
   /*
@@ -27,9 +39,16 @@ function saveFlats(flats) {
    * 4. Se ocorrer um erro, define storageMessage e devolve false.
    */
 
-  storageMessage = "Completa saveFlats() para guardar o array no browser.";
-  return false;
+  storageMessage = "Apartamentos guardados com sucesso.";
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(flats));
+    return { success: true, message: "Apartamentos guardados com sucesso." };
+  } catch (error) {
+    storageMessage = "Erro ao guardar os apartamentos.";
+    return { success: false, message: "Erro ao guardar os apartamentos." };
+  }
 }
+/* ------------------------------------------------------------ */
 
 function getStorageMessage() {
   return storageMessage;
