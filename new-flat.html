@@ -53,37 +53,43 @@
 
           <div class="field field--wide">
             <!-- TODO HTML-7: acrescenta um label associado a streetName. -->
+            <label for="streetName">Nome da rua *</label>
             <input id="streetName" name="streetName" type="text" placeholder="Nome da rua" required>
             <p id="streetNameError" class="field-error"></p>
           </div>
 
           <div class="field">
             <!-- TODO HTML-8: acrescenta um label associado a streetNumber. -->
+            <label for="streetNumber">Número da porta *</label>
             <input id="streetNumber" name="streetNumber" type="number" min="1" step="1" placeholder="Número da porta" required>
             <p id="streetNumberError" class="field-error"></p>
           </div>
 
           <div class="field">
             <!-- TODO HTML-9: acrescenta um label associado a areaSize. -->
+            <label for="areaSize">Área em m² *</label>
             <input id="areaSize" name="areaSize" type="number" min="0" step="0.1" placeholder="Área em m²" required>
             <p id="areaSizeError" class="field-error"></p>
           </div>
 
           <div class="field">
-            <!-- TODO HTML-10: acrescenta um label associado a yearBuilt. -->
+            <!-- TODO HTML-10: acrescenta um label associado a yearBuilt. --> 
+            <label for="yearBuilt">Ano de construção *</label>
             <input id="yearBuilt" name="yearBuilt" type="number" min="1900" step="1" placeholder="Ano de construção" required>
             <small>Entre 1900 e o ano actual.</small>
             <p id="yearBuiltError" class="field-error"></p>
           </div>
 
           <div class="field">
-            <!-- TODO HTML-11: acrescenta um label associado a rentPrice. -->
+            <!-- TODO HTML-11: acrescenta um label associado a rentPrice. --> 
+            <label for="rentPrice">Renda mensal *</label>
             <input id="rentPrice" name="rentPrice" type="number" min="0" step="0.01" placeholder="Renda mensal" required>
             <p id="rentPriceError" class="field-error"></p>
           </div>
 
           <div class="field">
-            <!-- TODO HTML-12: acrescenta um label associado a dateAvailable. -->
+            <!-- TODO HTML-12: acrescenta um label associado a dateAvailable. --> 
+            <label for="dateAvailable">Data de disponibilidade *</label>
             <input id="dateAvailable" name="dateAvailable" type="date" required>
             <p id="dateAvailableError" class="field-error"></p>
           </div>
@@ -108,5 +114,11 @@
   </main>
 
   <!-- TODO HTML-13: acrescenta um footer consistente com as restantes páginas. -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>RentEase - Comparador local de apartamentos</p>
+      <p>Tecnologias utilizadas: HTML, CSS, JavaScript</p>
+    </div>
+  </footer>
 </body>
 </html>
