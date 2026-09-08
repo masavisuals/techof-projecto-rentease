@@ -46,7 +46,9 @@ function createFavouriteCard(flat) {
   facts.appendChild(createFact("Área", `${flat.areaSize} m²`));
 
   // TODO JS-HOME-1: acrescenta a data de disponibilidade e o ar condicionado.
-
+  facts.appendChild(createFact("Data de disponibilidade", flat.dateAvailable));
+  facts.appendChild(createFact("Ar condicionado", flat.hasAirConditioning ? "Sim" : "Não"));
+  /* ------------------------------------------------------------ */
   const removeButton = document.createElement("button");
   removeButton.className = "button button--secondary button--small";
   removeButton.type = "button";
@@ -66,13 +68,13 @@ function renderHome(actionMessage = "") {
   totalFlatsCount.textContent = flats.length;
 
   // TODO JS-HOME-2: usa filter() para obter apenas os favoritos.
-  const favouriteFlats = [];
+  const favouriteFlats = flats.filter(flat => flat.isFavourite);
+  /* ------------------------------------------------------------ */
 
   favouriteFlatsCount.textContent = favouriteFlats.length;
   favouriteList.replaceChildren();
 
-  const message = actionMessage || getStorageMessage();
-
+  const message = actionMessage;
   if (message) {
     showHomeFeedback(message, actionMessage ? "success" : "warning");
   } else if (favouriteFlats.length === 0) {
@@ -82,7 +84,10 @@ function renderHome(actionMessage = "") {
   }
 
   // TODO JS-HOME-3: percorre favouriteFlats e acrescenta cada cartão a favouriteList.
+  favouriteFlats.forEach(flat => favouriteList.appendChild(createFavouriteCard(flat)));
 }
+
+/* ------------------------------------------------------------ */
 
 function removeFavourite(flatId) {
   /*
@@ -93,7 +98,16 @@ function removeFavourite(flatId) {
    * 4. Volta a chamar renderHome() com uma mensagem de sucesso.
    */
 
-  showHomeFeedback(`Falta implementar a remoção do favorito ${flatId}.`, "warning");
-}
+  const allFlats = loadFlats();
+  const flat = allFlats.find(flat => flat.id === flatId);
+  if (flat) {
+    flat.isFavourite = false;
+    saveFlats(allFlats);
+    renderHome("Favorito removido", "warning" === "success" ? "success" : "warning");
+    } else {
+      renderHome("Favorito não removido", "warning" === "success" ? "success" : "warning");
+    }
+  }
+/* ------------------------------------------------------------ */
 
 renderHome();

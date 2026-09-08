@@ -46,7 +46,26 @@ function getProcessedFlats() {
    * Os cinco filtros devem funcionar em conjunto.
    * As variáveis city, minPrice, maxPrice, minArea e maxArea já estão preparadas.
    */
-  const filteredFlats = allFlats;
+
+  /*const filteredFlats = allFlats.filter(
+    flat => flat.city.toLowerCase().includes(city) && 
+    flat.rentPrice >= minPrice && 
+    flat.rentPrice <= maxPrice && 
+    flat.areaSize >= minArea && 
+    flat.areaSize <= maxArea
+  );*/
+
+  const filteredFlats = allFlats.filter((flat) => {
+    const matchesCity = flat.city.toLowerCase().includes(city);
+    const matchesMinPrice = minPrice === null || flat.rentPrice >= minPrice;
+    const matchesMaxPrice = maxPrice === null || flat.rentPrice <= maxPrice;
+    const matchesMinArea = minArea === null || flat.areaSize >= minArea;
+    const matchesMaxArea = maxArea === null || flat.areaSize <= maxArea;
+  
+    return matchesCity && matchesMinPrice && matchesMaxPrice && matchesMinArea && matchesMaxArea;
+  });
+
+  /* ------------------------------------------------------------ */
 
   // Esta cópia evita ordenar directamente o array carregado.
   const sortedFlats = [...filteredFlats];
@@ -56,9 +75,20 @@ function getProcessedFlats() {
    * Ordena sortedFlats de acordo com sortBy.value:
    * city, price ou area. Se o valor for none, conserva a ordem.
    */
+  sortedFlats.sort((a, b) => {
+    if (sortBy.value === "city") {
+      return a.city.localeCompare(b.city);
+    } else if (sortBy.value === "price") {
+      return a.rentPrice - b.rentPrice;
+    } else if (sortBy.value === "area") {
+      return a.areaSize - b.areaSize;
+    }
 
+  });
   return { flats: sortedFlats, error: "" };
+  
 }
+/* ------------------------------------------------------------ */
 
 function createFact(label, value) {
   const fact = document.createElement("div");
@@ -109,7 +139,10 @@ function createFlatCard(flat) {
   facts.appendChild(createFact("Área", `${flat.areaSize} m²`));
 
   // TODO JS-FLATS-3: acrescenta ano, ar condicionado e disponibilidade.
-
+  facts.appendChild(createFact("Ano", flat.yearBuilt));
+  facts.appendChild(createFact("Ar condicionado", flat.hasAirConditioning ? "Sim" : "Não"));
+  facts.appendChild(createFact("Disponibilidade", flat.dateAvailable));
+  /* ------------------------------------------------------------ */
   const actions = document.createElement("div");
   actions.className = "property-card__actions";
 
@@ -138,14 +171,16 @@ function createFlatCard(flat) {
 function renderFlats(actionMessage = "", actionType = "success") {
   const processed = getProcessedFlats();
   flatList.replaceChildren();
+
   resultsCount.textContent = `${processed.flats.length} resultado${processed.flats.length === 1 ? "" : "s"}`;
+
 
   if (processed.error) {
     showFlatsFeedback(processed.error, "error");
     return;
   }
 
-  const message = actionMessage || getStorageMessage();
+  const message = actionMessage;
 
   if (message) {
     showFlatsFeedback(message, actionMessage ? actionType : "warning");
@@ -158,6 +193,8 @@ function renderFlats(actionMessage = "", actionType = "success") {
   for (const flat of processed.flats) {
     flatList.appendChild(createFlatCard(flat));
   }
+
+
 }
 
 function toggleFavourite(flatId) {
@@ -168,9 +205,15 @@ function toggleFavourite(flatId) {
    * 3. Guarda o array completo.
    * 4. Volta a renderizar.
    */
-
-  showFlatsFeedback(`Falta implementar a alteração do favorito ${flatId}.`, "warning");
+  const allFlats = loadFlats();
+  const flat = allFlats.find(flat => flat.id === flatId);
+  if (flat) {
+    flat.isFavourite = !flat.isFavourite;
+    saveFlats(allFlats);
+    renderFlats("Favorito atualizado", "warning" === "success" ? "success" : "warning" );
+  }
 }
+/* ------------------------------------------------------------ */
 
 function deleteFlat(flatId) {
   /*
@@ -180,9 +223,17 @@ function deleteFlat(flatId) {
    * 3. Guarda o novo array.
    * 4. Volta a renderizar.
    */
-
-  showFlatsFeedback(`Falta implementar a eliminação do apartamento ${flatId}.`, "warning");
+  const allFlats = loadFlats();
+  const newFlats = allFlats.filter(flat => flat.id !== flatId);
+  if (confirm("Tem a certeza que deseja eliminar este apartamento?")) {
+    saveFlats(newFlats);
+    renderFlats("Apartamento eliminado", "warning" === "success" ? "success" : "warning");  
+  } else {
+    renderFlats("Apartamento não eliminado", "warning" === "success" ? "success" : "warning");
+  }
 }
+
+/* ------------------------------------------------------------ */
 
 filtersForm.addEventListener("input", () => renderFlats());
 filtersForm.addEventListener("change", () => renderFlats());
