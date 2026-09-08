@@ -69,17 +69,12 @@ function renderHome(actionMessage = "") {
 
   // TODO JS-HOME-2: usa filter() para obter apenas os favoritos.
   const favouriteFlats = flats.filter(flat => flat.isFavourite);
-  if (favouriteFlats.length === 0) {
-    return { flats: [], error: "Ainda não existem apartamentos favoritos." };
-  }
-  return { flats: favouriteFlats, error: "" };
-/* ------------------------------------------------------------ */
+  /* ------------------------------------------------------------ */
 
   favouriteFlatsCount.textContent = favouriteFlats.length;
   favouriteList.replaceChildren();
 
-  const message = actionMessage || getStorageMessage();
-
+  const message = actionMessage;
   if (message) {
     showHomeFeedback(message, actionMessage ? "success" : "warning");
   } else if (favouriteFlats.length === 0) {
@@ -90,7 +85,6 @@ function renderHome(actionMessage = "") {
 
   // TODO JS-HOME-3: percorre favouriteFlats e acrescenta cada cartão a favouriteList.
   favouriteFlats.forEach(flat => favouriteList.appendChild(createFavouriteCard(flat)));
-  return { flats: favouriteFlats, error: "" };
 }
 
 /* ------------------------------------------------------------ */

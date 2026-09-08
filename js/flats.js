@@ -46,13 +46,25 @@ function getProcessedFlats() {
    * Os cinco filtros devem funcionar em conjunto.
    * As variáveis city, minPrice, maxPrice, minArea e maxArea já estão preparadas.
    */
-  const filteredFlats = allFlats.filter(
+
+  /*const filteredFlats = allFlats.filter(
     flat => flat.city.toLowerCase().includes(city) && 
     flat.rentPrice >= minPrice && 
     flat.rentPrice <= maxPrice && 
     flat.areaSize >= minArea && 
     flat.areaSize <= maxArea
-  );
+  );*/
+
+  const filteredFlats = allFlats.filter((flat) => {
+    const matchesCity = flat.city.toLowerCase().includes(city);
+    const matchesMinPrice = minPrice === null || flat.rentPrice >= minPrice;
+    const matchesMaxPrice = maxPrice === null || flat.rentPrice <= maxPrice;
+    const matchesMinArea = minArea === null || flat.areaSize >= minArea;
+    const matchesMaxArea = maxArea === null || flat.areaSize <= maxArea;
+  
+    return matchesCity && matchesMinPrice && matchesMaxPrice && matchesMinArea && matchesMaxArea;
+  });
+
   /* ------------------------------------------------------------ */
 
   // Esta cópia evita ordenar directamente o array carregado.
@@ -71,10 +83,9 @@ function getProcessedFlats() {
     } else if (sortBy.value === "area") {
       return a.areaSize - b.areaSize;
     }
+
   });
-  if (sortBy.value === "none") {
-    return { flats: sortedFlats, error: "" };
-  }
+  return { flats: sortedFlats, error: "" };
   
 }
 /* ------------------------------------------------------------ */
@@ -160,14 +171,16 @@ function createFlatCard(flat) {
 function renderFlats(actionMessage = "", actionType = "success") {
   const processed = getProcessedFlats();
   flatList.replaceChildren();
+
   resultsCount.textContent = `${processed.flats.length} resultado${processed.flats.length === 1 ? "" : "s"}`;
+
 
   if (processed.error) {
     showFlatsFeedback(processed.error, "error");
     return;
   }
 
-  const message = actionMessage || getStorageMessage();
+  const message = actionMessage;
 
   if (message) {
     showFlatsFeedback(message, actionMessage ? actionType : "warning");
@@ -180,6 +193,8 @@ function renderFlats(actionMessage = "", actionType = "success") {
   for (const flat of processed.flats) {
     flatList.appendChild(createFlatCard(flat));
   }
+
+
 }
 
 function toggleFavourite(flatId) {
@@ -198,6 +213,7 @@ function toggleFavourite(flatId) {
     renderFlats("Favorito atualizado", "warning" === "success" ? "success" : "warning" );
   }
 }
+/* ------------------------------------------------------------ */
 
 function deleteFlat(flatId) {
   /*

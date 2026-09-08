@@ -166,6 +166,7 @@ newFlatForm.addEventListener("submit", (event) => {
     isFavourite: false
   };
   allFlats.push(newFlat);
+  saveFlats(allFlats);
   if (saveFlats(allFlats)) {
     showFormFeedback("Apartamento guardado com sucesso", "warning" === "success" ? "success" : "warning", true);
   } else {
